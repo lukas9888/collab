@@ -29,12 +29,12 @@ while True:
         def settle():
             """In this function will settle the dept between the payer and reciver and output the difference """
             transaction = {}
-            for transaction in summed_transactions:
-                if transaction[0] not in transaction:
-                    transaction.setdefault(transaction[0], transaction[1])
+            for amount_transactions in summed_transactions:
+                if amount_transactions[0] not in transaction:
+                    transaction.setdefault(amount_transactions[0], amount_transactions[1])
                 else:
-                    total = transaction[1] + transaction[transaction[0]]
-                    transaction[transaction[0]] = total
+                    total = amount_transactions[1] + transaction[amount_transactions[0]]
+                    transaction[amount_transactions[0]] = total
                 
             print()
             for payer in transaction:
@@ -52,3 +52,4 @@ while True:
             print("settled")
 
         settle()
+        print()
