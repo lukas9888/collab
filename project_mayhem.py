@@ -1,55 +1,44 @@
-while True:
-    
-    amount_transactions = input() #input on amount of transactions
+def transaction_input():
+    """The input should be: payer reciver amount
+    this for loop is tracing all the transaction and putting them in a list. 
+    People who owe units will be given a positive value equal to their debt
+    People who are owed units will be given a negative value equal to what they are owed"""
+    transactions = []
+    amount_transactions = int(input()) #input on amount of transactions
 
-    if amount_transactions == 'q':
-        break 
+    for x in range(amount_transactions):  
+        if amount_transactions >= 1:
+            tosplit = input().split()
 
-    else: 
-        amount_transactions = int(amount_transactions)
-        summed_transactions = []
-        """
-        The input for this lopp should be: payer reciver amount
-        this for loop is tracing all the transaction and putting them in a list. 
-        People who owe units will be given a positive value equal to their dept
-        People who are owed units will be given a negative value equal to what they are owed
-        """
-        for x in range(int(amount_transactions)):  
-            if amount_transactions >= 1 and amount_transactions <= 100000:
-                tosplit = input().split()
+            payer = tosplit[0]
+            receiver = tosplit[1]
+            amount = int(tosplit[2])
+            
+            transactions.append([payer, - amount])
+            transactions.append([receiver, amount])
+    return transactions
 
-                payer = tosplit[0]
-                receiver = tosplit[1]
-                amount = int(tosplit[2])
-                
-                summed_transactions.append([payer, - amount])
-                summed_transactions.append([receiver, amount])
+balance = {}
+def settle():
+    """This function will settle the debt between the payer and reciver and output the difference """
+    for transaction in transactions:
+        if transaction[0] not in balance:
+            balance.setdefault(transaction[0], transaction[1])
+        else:
+            total = transaction[1] + balance[transaction[0]]
+            balance[transaction[0]] = total
 
-                
-        def settle():
-            """In this function will settle the dept between the payer and reciver and output the difference """
-            transaction = {}
-            for amount_transactions in summed_transactions:
-                if amount_transactions[0] not in transaction:
-                    transaction.setdefault(amount_transactions[0], amount_transactions[1])
-                else:
-                    total = amount_transactions[1] + transaction[amount_transactions[0]]
-                    transaction[amount_transactions[0]] = total
-                
-            print()
-            for payer in transaction:
-                for receiver in transaction:
-                    if transaction[payer] > 0:
-                        if transaction[receiver] < 0 and payer != receiver:
-                            if -transaction[receiver] > transaction[payer]:
-                                print(f"{payer} {receiver} {transaction[payer]}")
-                                transaction[receiver] = transaction[receiver] + transaction[payer]
-                                transaction[payer] = 0
-                            else:    
-                                print(f"{payer} {receiver} {-transaction[receiver]}")
-                                transaction[payer] = transaction[payer] + transaction[receiver]
-                                transaction[receiver] = 0
-            print("settled")
-
-        settle()
-        print()
+def view():
+    local_balance = balance
+    for payer in local_balance:
+        for receiver in local_balance:
+            if local_balance[payer] > 0:
+                if local_balance[receiver] < 0 and payer != receiver:
+                    if -local_balance[receiver] > local_balance[payer]:
+                        print(f"{payer} {receiver} {local_balance[payer]}")
+                        local_balance[receiver] = local_balance[receiver] + local_balance[payer]
+                        local_balance[payer] = 0
+                    else:    
+                        print(f"{payer} {receiver} {-local_balance[receiver]}")
+                        local_balance[payer] = local_balance[payer] + local_balance[receiver]
+                        local_balance[receiver] = 0
