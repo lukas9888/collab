@@ -1,3 +1,42 @@
+username_input = ''
+def user_name():
+    users = []
+    with open('users.txt', 'r') as user_database:
+        for usernames in user_database:
+            usernames = usernames.rstrip()
+            users.append(usernames)
+    while True:
+        username_input = input('Username: ') 
+        if username_input in users:
+            username_input = username_input
+            break
+        else:
+            create_new_user = input('Do you want to create a new user? (y/n)')
+            if create_new_user == 'y':
+                new_user_name()
+                break
+            else:
+                continue
+
+       
+def new_user_name():
+    existing_users = []
+    with open('users.txt', 'r') as existing_users_text:
+        for user in existing_users_text:
+            user = user.rstrip()
+            existing_users.append(user)
+
+    while True: 
+        new_name = input('New username: ')   
+        if new_name not in existing_users:
+            with open('users.txt', 'a') as user_text:
+                user_text.write('\n' + new_name)
+                break
+        else:
+            print('User allready exists')
+
+
+
 transactions = []
 def transaction_input():
     """The input should be: payer reciver amount
@@ -55,34 +94,3 @@ def view():
                         print(f"\n{payer} {receiver} {-local_balance[receiver]}")
                         local_balance[payer] = local_balance[payer] + local_balance[receiver]
                         local_balance[receiver] = 0
-
-
-username_input = ''
-def user_name():
-    users = []
-    with open('users.txt', 'r') as user_database:
-        for usernames in user_database:
-            usernames = usernames.rstrip()
-            users.append(usernames)
-    while True:
-        username_input = input('Username: ') 
-        if username_input in users:
-            username_input = username_input
-            break
-
-
-def new_user_name():
-    existing_users = []
-    with open('users.txt', 'r') as existing_users_text:
-        for user in existing_users_text:
-            user = user.rstrip()
-            existing_users.append(user)
-
-    while True: 
-        new_name = input('New username: ')   
-        if new_name not in existing_users:
-            with open('users.txt', 'a') as user_text:
-                user_text.write('\n' + new_name)
-                break
-        else:
-            print('User allready exists')
