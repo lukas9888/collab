@@ -1,4 +1,4 @@
-username_input = ''
+user = ['']
 def user_name():
     users = []
     with open('users.txt', 'r') as user_database:
@@ -8,7 +8,7 @@ def user_name():
     while True:
         username_input = input('Username: ') 
         if username_input in users:
-            username_input = username_input
+            user[0] = username_input
             break
         else:
             create_new_user = input('Do you want to create a new user? (y/n)')
@@ -17,6 +17,9 @@ def user_name():
                 break
             else:
                 continue
+    return username_input
+
+
 
        
 def new_user_name():
@@ -43,18 +46,22 @@ def transaction_input():
     this for loop is tracing all the transaction and putting them in a list. 
     People who owe units will be given a positive value equal to their debt
     People who are owed units will be given a negative value equal to what they are owed"""
-    amount_transactions = int(input()) #input on amount of transactions
+    
+    payer = user[0]
+    amount_transactions = int(input('Amount of transactions: ')) #input on amount of transactions
+
 
     for x in range(amount_transactions):  
         if amount_transactions >= 1:
             tosplit = input().split()
 
-            payer = tosplit[0]
-            receiver = tosplit[1]
-            amount = int(tosplit[2])
+            receiver = tosplit[0]
+            amount = int(tosplit[1])
             
             transactions.append([payer, - amount])
             transactions.append([receiver, amount])
+
+
     
 
 balance = {}
