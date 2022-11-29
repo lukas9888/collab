@@ -6,7 +6,7 @@ def user_name():
             usernames = usernames.rstrip()
             users.append(usernames)
     while True:
-        username_input = input('Username: ') 
+        username_input = input('Username: ').rstrip()
         if username_input in users:
             user[0] = username_input
             break
@@ -46,9 +46,17 @@ def transaction_input():
     this for loop is tracing all the transaction and putting them in a list. 
     People who owe units will be given a positive value equal to their debt
     People who are owed units will be given a negative value equal to what they are owed"""
-    
     payer = user[0]
-    amount_transactions = int(input('Amount of transactions: ')) #input on amount of transactions
+    
+    while True:
+        try:
+            amount_transactions = int(input('Amount of transactions: ')) #input on amount of transactions
+            break
+        except ValueError:
+            print('You need to input a number!')
+            continue
+
+
 
 
     for x in range(amount_transactions):  
@@ -62,11 +70,10 @@ def transaction_input():
             transactions.append([receiver, amount])
 
 
-    
 
-balance = {}
-def settle():
-    """This function will settle the debt between the payer and reciver and output the difference """
+balance = {} 
+
+def read_balance():
     with open('balance.txt', 'r') as balance_text: # This will read if there are any previous transactions made and put it in the dictonary 
         for users in balance_text:
             users = users.rstrip()
@@ -76,18 +83,26 @@ def settle():
             else:
                 balance[user[0]] = int(user[1])
 
+def settle():
     for transaction in transactions:
         if transaction[0] not in balance:
             balance.setdefault(transaction[0], transaction[1])
         else:
             total = transaction[1] + balance[transaction[0]]
             balance[transaction[0]] = total
-    with open('balance.txt', 'w') as balance_text: #this will save the transactions made into a dictonary 
+
+def write_balance():
+       with open('balance.txt', 'a') as balance_text: #this will save the transactions made into a dictonary 
         for users in balance: 
             balance_text.write(f'{users}, {balance[users]}\n')
 
 
-def view():
+
+balance = {}
+
+
+
+def view_all():
     local_balance = balance
     for payer in local_balance:
         for receiver in local_balance:
@@ -99,5 +114,22 @@ def view():
                         local_balance[payer] = 0
                     else:    
                         print(f"\n{payer} {receiver} {-local_balance[receiver]}")
+                        local_balance[payer] = local_balance[payer] + local_balance[receiver]
+                        local_balance[receiver] = 0
+
+def view_user():
+    local_balance = balance
+    for payer in local_balance:
+        for receiver in local_balance:
+            if local_balance[payer] > 0:
+                if local_balance[receiver] < 0 and payer != receiver:
+                    if -local_balance[receiver] > local_balance[payer]:
+                        if payer in user or receiver in user:
+                            print(f"\n{payer} {receiver} {local_balance[payer]}")
+                        local_balance[receiver] = local_balance[receiver] + local_balance[payer]
+                        local_balance[payer] = 0
+                    else: 
+                        if payer in user or receiver in user:   
+                            print(f"\n{payer} {receiver} {-local_balance[receiver]}")
                         local_balance[payer] = local_balance[payer] + local_balance[receiver]
                         local_balance[receiver] = 0
